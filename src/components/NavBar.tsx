@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const LINKS = [
   { href: "/", label: "Inicio" },
@@ -15,11 +15,6 @@ const LINKS = [
 export function NavBar({ appName }: { appName: string }) {
   const pathname = usePathname();
   const [abierto, setAbierto] = useState(false);
-
-  // Cierra el menú móvil al cambiar de ruta.
-  useEffect(() => {
-    setAbierto(false);
-  }, [pathname]);
 
   const activo = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
@@ -68,6 +63,7 @@ export function NavBar({ appName }: { appName: string }) {
             <li key={l.href}>
               <Link
                 href={l.href}
+                onClick={() => setAbierto(false)}
                 className={`block rounded-lg px-3 py-2 font-medium ${
                   activo(l.href)
                     ? "bg-blue-600 text-white"

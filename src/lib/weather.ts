@@ -1,6 +1,6 @@
 import { cacheLife } from "next/cache";
 import { config } from "./config";
-import type { Clima, ResultadoClima, Ubicacion } from "./tipos-clima";
+import type { ResultadoClima, Ubicacion } from "./tipos-clima";
 
 export type { Clima, ClimaActual, PronosticoDia, ResultadoClima, Ubicacion } from "./tipos-clima";
 
@@ -84,19 +84,16 @@ export async function buscarUbicaciones(nombre: string): Promise<Ubicacion[]> {
     results?: { name: string; admin1?: string; country: string; country_code: string; latitude: number; longitude: number }[];
   };
 
-  const resultados = (data.results ?? []).map((r) => ({
-    nombre: r.name,
-    region: r.admin1 ?? "",
-    pais: r.country,
-    codigoPais: r.country_code,
-    lat: r.latitude,
-    lon: r.longitude,
-  }));
+  const esPaisPreferido = (codigo: string) => Number(codigo === config.defaultCountry);
 
   // Prioriza resultados del país configurado (El Salvador por defecto).
-  resultados.sort(
-    (a, b) => Number(b.codigoPais === config.defaultCountry) - Number(a.codigoPais === config.defaultCountry),
-  );
-
-  return resultados.map(({ codigoPais: _codigoPais, ...u }) => u);
+  return [...(data.results ?? [])]
+    .sort((a, b) => esPaisPreferido(b.country_code) - esPaisPreferido(a.country_code))
+    .map((r) => ({
+      nombre: r.name,
+      region: r.admin1 ?? "",
+      pais: r.country,
+      lat: r.latitude,
+      lon: r.longitude,
+    }));
 }

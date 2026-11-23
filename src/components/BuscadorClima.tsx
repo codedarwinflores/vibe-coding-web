@@ -17,9 +17,13 @@ const SUGERENCIAS = ["San Salvador", "Santa Ana", "San Miguel", "Suchitoto", "La
 export function BuscadorClima() {
   const [texto, setTexto] = useState("San Salvador");
   const [ciudad, setCiudad] = useState("San Salvador");
-  const [datos, setDatos] = useState<RespuestaClima | null>(null);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Resultado de la última consulta terminada, asociado a la ciudad que lo pidió.
+  const [resultado, setResultado] = useState<{ ciudad: string; datos?: RespuestaClima; error?: string } | null>(null);
+
+  // Estado derivado: la consulta está en curso si el resultado no corresponde a la ciudad actual.
+  const cargando = resultado?.ciudad !== ciudad;
+  const datos = cargando ? null : (resultado?.datos ?? null);
+  const error = cargando ? null : (resultado?.error ?? null);
 
   // Debounce: espera 600 ms después de que el usuario deja de escribir.
   useEffect(() => {
@@ -31,22 +35,16 @@ export function BuscadorClima() {
 
   useEffect(() => {
     const controlador = new AbortController();
-    setCargando(true);
-    setError(null);
 
     fetch(`/api/clima?ciudad=${encodeURIComponent(ciudad)}`, { signal: controlador.signal })
       .then(async (res) => {
         const json = await res.json();
         if (!res.ok) throw new Error(json.error ?? "No se pudo obtener el clima.");
-        setDatos(json as RespuestaClima);
+        setResultado({ ciudad, datos: json as RespuestaClima });
       })
       .catch((e: unknown) => {
         if (e instanceof DOMException && e.name === "AbortError") return;
-        setDatos(null);
-        setError(e instanceof Error ? e.message : "Error desconocido.");
-      })
-      .finally(() => {
-        if (!controlador.signal.aborted) setCargando(false);
+        setResultado({ ciudad, error: e instanceof Error ? e.message : "Error desconocido." });
       });
 
     return () => controlador.abort();
