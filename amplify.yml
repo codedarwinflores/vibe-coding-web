@@ -1,0 +1,25 @@
+# Configuración de build para AWS Amplify Hosting (Next.js SSR, plataforma WEB_COMPUTE).
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Next.js 16 requiere Node.js 20.9 o superior.
+        - nvm use 22
+        - node -v
+        - npm ci --cache .npm --prefer-offline
+    build:
+      commands:
+        # Amplify no expone las variables de entorno de la consola al runtime del servidor (SSR).
+        # Se copian a .env.production durante el build para que Next.js las lea en producción.
+        # Este archivo solo existe en el servidor de build; nunca se sube al repositorio.
+        - env | grep -E '^(NEXT_PUBLIC_APP_NAME|OPEN_METEO_FORECAST_URL|OPEN_METEO_GEOCODING_URL|DEFAULT_COUNTRY_CODE|WEATHER_TIMEZONE)=' >> .env.production || true
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .next/cache/**/*
+      - .npm/**/*
