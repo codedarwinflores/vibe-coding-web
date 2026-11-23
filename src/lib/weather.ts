@@ -1,37 +1,8 @@
 import { cacheLife } from "next/cache";
 import { config } from "./config";
+import type { Clima, ResultadoClima, Ubicacion } from "./tipos-clima";
 
-export interface ClimaActual {
-  temperatura: number;
-  sensacion: number;
-  humedad: number;
-  viento: number;
-  codigo: number;
-  esDeDia: boolean;
-}
-
-export interface PronosticoDia {
-  fecha: string;
-  codigo: number;
-  maxima: number;
-  minima: number;
-  lluvia: number;
-}
-
-export interface Clima {
-  actual: ClimaActual;
-  dias: PronosticoDia[];
-}
-
-export type ResultadoClima = { ok: true; clima: Clima } | { ok: false; error: string };
-
-export interface Ubicacion {
-  nombre: string;
-  region: string;
-  pais: string;
-  lat: number;
-  lon: number;
-}
+export type { Clima, ClimaActual, PronosticoDia, ResultadoClima, Ubicacion } from "./tipos-clima";
 
 interface OpenMeteoForecast {
   current: {
@@ -128,31 +99,4 @@ export async function buscarUbicaciones(nombre: string): Promise<Ubicacion[]> {
   );
 
   return resultados.map(({ codigoPais: _codigoPais, ...u }) => u);
-}
-
-const CODIGOS: Record<number, [string, string]> = {
-  0: ["Despejado", "☀️"],
-  1: ["Mayormente despejado", "🌤️"],
-  2: ["Parcialmente nublado", "⛅"],
-  3: ["Nublado", "☁️"],
-  45: ["Niebla", "🌫️"],
-  48: ["Niebla con escarcha", "🌫️"],
-  51: ["Llovizna ligera", "🌦️"],
-  53: ["Llovizna", "🌦️"],
-  55: ["Llovizna intensa", "🌧️"],
-  61: ["Lluvia ligera", "🌦️"],
-  63: ["Lluvia", "🌧️"],
-  65: ["Lluvia fuerte", "🌧️"],
-  80: ["Chubascos", "🌦️"],
-  81: ["Chubascos fuertes", "🌧️"],
-  82: ["Chubascos violentos", "⛈️"],
-  95: ["Tormenta", "⛈️"],
-  96: ["Tormenta con granizo", "⛈️"],
-  99: ["Tormenta fuerte con granizo", "⛈️"],
-};
-
-/** Traduce un código WMO a descripción en español y emoji. */
-export function describirClima(codigo: number, esDeDia = true): { texto: string; icono: string } {
-  const [texto, icono] = CODIGOS[codigo] ?? ["Condición variable", "🌡️"];
-  return { texto, icono: !esDeDia && codigo <= 1 ? "🌙" : icono };
 }
