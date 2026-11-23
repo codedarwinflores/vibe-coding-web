@@ -2,7 +2,7 @@
 
 Aplicación web hecha con **Next.js 16 (App Router)** y **TypeScript** usando la metodología de **Vibe Coding**. Permite explorar playas, volcanes, lagos, pueblos y sitios arqueológicos de El Salvador, consultar el clima actual y el pronóstico de 7 días de cada destino y guardar favoritos.
 
-🌐 **Producción:** <URL_DE_VERCEL>
+🌐 **Producción (Vercel):** <https://vibe-coding-web-phi.vercel.app>
 
 📝 **Proceso de Vibe Coding** (prompts, iteraciones, decisiones y desafíos): [`VIBE_CODING.md`](VIBE_CODING.md)
 
@@ -122,12 +122,34 @@ src/
 
 ## ☁️ Despliegue
 
-Desplegada en **Vercel** desde la rama `main` de este repositorio. Cada `git push` genera un nuevo despliegue.
+Desplegada en **Vercel**: <https://vibe-coding-web-phi.vercel.app>
 
-1. En Vercel: **Add New → Project → Import** del repositorio `vibe-coding-web`.
-2. Framework detectado: **Next.js** (build `npm run build`).
-3. Agregar las variables de `.env.example` en *Environment Variables*.
-4. **Deploy.**
+El proyecto de Vercel está conectado a la rama `main` de este repositorio, así que cada `git push` genera un nuevo despliegue automáticamente.
+
+Pasos que se siguieron:
+
+1. En Vercel: **Add New → Project → Import** del repositorio `codedarwinflores/vibe-coding-web`.
+2. Framework detectado automáticamente: **Next.js** (build `npm run build`).
+3. Variables de `.env.example` agregadas en *Environment Variables* (Production y Preview).
+4. **Deploy:** build completado en unos 35 segundos, con estado **Ready**.
+
+## 📸 Capturas
+
+**Panel de Vercel con el despliegue en producción (estado Ready):**
+
+![Despliegue en Vercel](docs/capturas/01-vercel-deployment-ready.jpg)
+
+**Aplicación funcionando en la URL pública:**
+
+![Inicio en producción](docs/capturas/02-app-inicio-produccion.png)
+
+**Buscador de clima (Client Component que consume `/api/clima`):**
+
+![Clima en producción](docs/capturas/03-app-clima-produccion.png)
+
+**Vista móvil del detalle de un destino:**
+
+<img src="docs/capturas/04-app-destino-movil.png" alt="Vista móvil" width="320">
 
 ---
 

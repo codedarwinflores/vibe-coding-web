@@ -30,7 +30,7 @@ Registro del desarrollo de **Destinos SV** con la metodología de Vibe Coding. L
 | 4 | "Agrega Route Handlers: `/api/clima` (por ciudad o coordenadas) y `/api/destinos` (con filtro)." | Handlers con validación y códigos 400 / 404 / 502. | Probamos con `curl` los casos válidos e inválidos. |
 | 5 | "Construye las páginas: inicio, listado con filtros, detalle con pronóstico, buscador de clima, favoritos y acerca." | 6 rutas; Server Components para datos y Client Components para interacción. | Verificamos que cada Client Component recibiera solo datos serializables. |
 | 6 | "Agrega loading, error y not-found, y deja el lint en cero." | `loading.tsx`, `error.tsx`, `not-found.tsx`, skeletons con Suspense. | Corregimos los errores reportados (ver desafíos). |
-| 7 | "Documenta el proyecto (README, `.env.example`, este archivo) y despliega en Vercel." | Documentación y despliegue. | Probamos la URL de producción. |
+| 7 | "Documenta el proyecto (README, `.env.example`, este archivo) y despliega en Vercel." | Documentación; proyecto importado en Vercel con las variables de entorno. | Probamos la URL de producción (https://vibe-coding-web-phi.vercel.app): todas las rutas, las APIs y el 404. |
 
 ## 3. Decisiones técnicas
 
